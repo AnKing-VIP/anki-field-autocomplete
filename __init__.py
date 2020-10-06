@@ -70,7 +70,7 @@ def myBridge(self, cmd, _old=None):
         # prefix is what the user typed so far
         model_name = self.note.model()["name"]
         field_name = field["name"]
-        query = f'note:"{model_name}" {field_name}:"{text}*"'
+        query = f'note:"{model_name}" "{field_name}:{text}*"'
         # query = "'note:%s' '%s:%s*'" % (
         # self.note.model()['name'],
         # field['name'],
