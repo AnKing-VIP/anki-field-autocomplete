@@ -1,13 +1,15 @@
 import json
 import re
 
-from aqt import gui_hooks
+from aqt import gui_hooks, mw
 from aqt.editor import Editor
 
 RE_SUB_INVALID = re.compile(r"[^a-zA-Z0-9 \n\s]").sub
 
 noAutocompleteFields = []
 prevAutocomplete = ""
+
+mw.addonManager.setWebExports(__name__, r"(web|icons)/.*\.(js|css|png)")
 
 
 def handle_bridge_command(handled, cmd, context):
@@ -76,29 +78,7 @@ def handle_bridge_command(handled, cmd, context):
     print(escaped)
     print()
 
-    editor.web.eval(
-        """
-        $('.autocomplete').remove();
-
-        (function(){
-            let currentField = getCurrentField()
-            if (currentField) {
-            $('<div class="autocomplete">' + %s + '</div>').click({field: currentField}, updateField).insertAfter(currentField)}
-
-            function updateField(event){
-                currentField = event.data.field;
-                console.log(currentField)
-                console.log(currentField.editable)
-                currentField.editable.fieldHTML = %s;
-
-                console.log(currentField.ord)
-                focusField(currentField.ord);
-                currentField.editable.caretToEnd();
-            }
-        })()
-    """
-        % (escaped, escaped)
-    )
+    editor.web.eval(f"Autocomplete.update({escaped})")
 
     return handled
 
