@@ -7,8 +7,7 @@ from aqt.editor import Editor
 
 from .config import set, remove
 
-noAutocompleteFields = []
-prevAutocomplete = ""
+MAXIMUM_OPTION_AMOUNT = 20
 
 mw.addonManager.setWebExports(__name__, r"(web|icons)/.*\.(js|css|png)")
 
@@ -45,26 +44,19 @@ def handle_update_ac_settings(cmd, editor):
     return True
 
 
-def handle_autocomplete(cmd, editor):
+def handle_autocomplete(cmd, editor : Editor):
     global prevAutocomplete
 
-    (_, jsonText) = cmd.split(":", 1)
+    _, jsonText = cmd.split(":")
     data = json.loads(jsonText)
     ord = data["ord"]
-
-    field = editor.note.note_type()["flds"][ord]
-
-    if field["name"] in noAutocompleteFields:
-        field["no_autocomplete"] = True
-
-    if "no_autocomplete" in list(field.keys()) and field["no_autocomplete"]:
-        return False
 
     model_name = editor.note.note_type()["name"]
     query = f'note:"{model_name}"'
     col = editor.note.col
     nids = col.find_notes(query)
 
+    nids = nids[:MAXIMUM_OPTION_AMOUNT]
     options = [
         col.get_note(nid).fields[ord]
         for nid in nids
