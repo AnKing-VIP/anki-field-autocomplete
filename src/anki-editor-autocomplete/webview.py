@@ -6,7 +6,6 @@ from aqt import gui_hooks, mw
 import aqt
 from aqt.editor import Editor
 
-RE_SUB_INVALID = re.compile(r"[^a-zA-Z0-9 \n\s]").sub
 
 noAutocompleteFields = []
 prevAutocomplete = ""
@@ -48,8 +47,8 @@ def handle_bridge_command(handled, cmd, context):
     ]
 
     data = {
-        "options" : options,
-        "ord" : ord,
+        "options": options,
+        "ord": ord,
     }
 
     editor.web.eval(f"Autocomplete.update({json.dumps(data)})")
@@ -57,7 +56,7 @@ def handle_bridge_command(handled, cmd, context):
     return handled
 
 
-def load_autocomplete_js(webcontent : aqt.webview.WebContent, context):
+def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
     if isinstance(context, Editor):
         addon_package = context.mw.addonManager.addonFromModule(__name__)
         base_path = Path(f"/_addons/{addon_package}/web")
@@ -77,10 +76,6 @@ def load_autocomplete_js(webcontent : aqt.webview.WebContent, context):
             webcontent.css.append(str(file))
 
 
-
 def init_webview():
     gui_hooks.webview_will_set_content.append(load_autocomplete_js)
     gui_hooks.webview_did_receive_js_message.append(handle_bridge_command)
-
-    # FieldDialog.loadField = wrap(FieldDialog.loadField, myLoadField, 'after')
-    # FieldDialog.saveField = wrap(FieldDialog.saveField, mySaveField, 'after')

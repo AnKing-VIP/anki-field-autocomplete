@@ -1,3 +1,87 @@
+var Autocomplete = {
+    acInstances : [],
+    optionsByField : [],
+
+    update: (data) => {
+        var { ord, options } = data
+        Autocomplete.optionsByField[ord] = options
+        // Autocomplete.acInstances[ord].start()
+    }, 
+
+    setup: () => {
+        for(x of Autocomplete.acInstances){
+            x.unInit()
+            delete x
+        }
+        Autocomplete.acInstances = []
+        Autocomplete.optionsByField = []
+
+        forEditorField([], (field) => {
+            var editable = field.editingArea.editable
+            var ord = field.editingArea.ord
+
+            style = document.createElement("style")
+            style.innerHTML = css
+            field.editingArea.shadowRoot.insertBefore(style, editable)
+
+            var ac = new autoComplete({ 
+                selector: () => { return editable },
+                data: {
+                    src: () => { return Autocomplete.optionsByField[ord] },
+                    filter: (options) => {
+                        var result = options.filter( x => x.value.replace(' ', '') != '' )
+                        return result
+                    },
+                },
+                resultItem: {
+                    highlight: {
+                        render: true
+                    }
+                },
+                wrapper: false,
+                events: {
+                    input: {
+                        init: (event) => {
+                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
+                        },
+                        focus: (event) => {
+                            ac.start();
+                        },
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            editable.fieldHTML = selection;
+                        },
+                    },
+                },
+                threshold: 0,
+                resultsList: {
+                    tag: "ul",
+                    class: "autoComplete_results",
+                    tabSelect: true,
+                    noResults: true,
+                    element: (list, data) => {
+                        if (!data.results.length) {
+                            const message = document.createElement("div");
+                            message.setAttribute("class", "no_result");
+                            message.innerHTML = `<span>no results</span>`;
+                            list.appendChild(message);
+                        }
+                    },
+                    // position: "afterend",
+                    // maxResults: 5,
+                },
+                query: (input) => {
+                    return input.replace("<br>", "");
+                },
+            })
+
+            Autocomplete.acInstances.push(ac)
+            Autocomplete.optionsByField.push([])
+        })
+    },
+}
+
+
 css = `
 .no_result {
     padding: 10px 20px;
@@ -69,103 +153,3 @@ css = `
     background-color: rgba(123, 123, 123, .1)
 }
 `
-
-var Autocomplete = {
-    acInstances : [],
-    optionsByField : [],
-
-    update: (data) => {
-        var { ord, options } = data
-        Autocomplete.optionsByField[ord] = options
-        // Autocomplete.acInstances[ord].start()
-    }, 
-
-    setupAuto: () => {
-        for(x of Autocomplete.acInstances){
-            x.unInit()
-        }
-        Autocomplete.acInstances = []
-        Autocomplete.optionsByField = []
-
-        forEditorField([], (field) => {
-            var editable = field.editingArea.editable
-            var ord = field.editingArea.ord
-
-            style = document.createElement("style")
-            style.innerHTML = css
-            field.editingArea.shadowRoot.insertBefore(style, editable)
-
-            var ac = new autoComplete({ 
-                selector: () => { return editable },
-                data: {
-                    src: () => { return Autocomplete.optionsByField[ord] },
-                    filter: (options) => {
-                        var result = options.filter( x => x.value.replace(' ', '') != '' )
-                        return result
-                    },
-                },
-                resultItem: {
-                    highlight: {
-                        render: true
-                    }
-                },
-                wrapper: false,
-                events: {
-                    input: {
-                        init: (event) => {
-                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
-                        },
-                        focus: (event) => {
-                            ac.start();
-                        },
-                        selection: (event) => {
-                            const selection = event.detail.selection.value;
-                            editable.fieldHTML = selection;
-                        },
-                    },
-                },
-                threshold: 0,
-                resultsList: {
-                    tag: "ul",
-                    class: "autoComplete_results",
-                    tabSelect: true,
-                    noResults: true,
-                    element: (list, data) => {
-                        if (!data.results.length) {
-                            const message = document.createElement("div");
-                            message.setAttribute("class", "no_result");
-                            message.innerHTML = `<span>no results"</span>`;
-                            list.appendChild(message);
-                        }
-                    },
-                    // position: "afterend",
-                    // maxResults: 5,
-                },
-                query: (input) => {
-                    return input.replace("<br>", "");
-                },
-            })
-
-            Autocomplete.acInstances.push(ac)
-            Autocomplete.optionsByField.push([])
-        })
-    },
-
-    load: () => {
-        // if (document.body.hasAttribute("has-autocomplete")) return
-
-        // document.body.setAttribute("has-autocomplete", "")
-
-        // // every second send the current state over
-        // setInterval(function () {
-        //     const currentField = getCurrentField()
-        //     if (currentField) {
-        //         var r = {
-        //            text: currentField.editable.innerHTML
-        //         };
-        //         pycmd("autocomplete:" + JSON.stringify(r));
-        //     }
-        // }, 1000);
-
-    }
-}
