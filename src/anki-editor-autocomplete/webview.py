@@ -1,7 +1,9 @@
 import json
 import re
+from pathlib import Path
 
 from aqt import gui_hooks, mw
+import aqt
 from aqt.editor import Editor
 
 RE_SUB_INVALID = re.compile(r"[^a-zA-Z0-9 \n\s]").sub
@@ -83,13 +85,25 @@ def handle_bridge_command(handled, cmd, context):
     return handled
 
 
-def load_autocomplete_js(webcontent, context):
+def load_autocomplete_js(webcontent : aqt.webview.WebContent, context):
     if isinstance(context, Editor):
         addon_package = context.mw.addonManager.addonFromModule(__name__)
-        base_path = f"/_addons/{addon_package}/web"
+        base_path = Path(f"/_addons/{addon_package}/web")
 
-        webcontent.js.append(f"{base_path}/autcomplete.js")
-        webcontent.css.append(f"{base_path}/autcomplete.css")
+        webcontent.head += f'<script type="module" src="{str(base_path / "autocomplete/autoComplete.js")}"></script>'
+
+        addons_folder = Path(context.mw.addonManager.addonsFolder())
+        addons_dir = (addons_folder / addon_package / "web")
+        for file in addons_dir.glob('*.js'):
+            file = file.relative_to(addons_dir)
+            file = base_path / file
+            webcontent.js.append(str(file))
+
+        for file in addons_dir.glob('*.css'):
+            file = file.relative_to(addons_dir)
+            file = base_path / file
+            webcontent.css.append(str(file))
+
 
 
 def init_webview():
