@@ -56,36 +56,22 @@ css = `
 `
 
 var Autocomplete = {
-    "acInstances" : [],
+    acInstances : [],
+    optionsByField : [],
 
-    update: (text) => {
-
-        // $('.autocomplete').remove();
-
-        // getCurrentField().setAttribute('contenteditable', "true")
-
-        // let currentField = getCurrentField()
-        // if (currentField) {
-        //     $('<div class="autocomplete">' + text + '</div>').click(
-        //         {field: currentField}, 
-        //         updateField
-        //     ).insertAfter(currentField)
-        // }
-
-        // function updateField(event){
-        //     currentField = event.data.field;
-        //     currentField.editable.fieldHTML = text;
-        //     focusField(currentField.ord);
-        //     currentField.editable.caretToEnd();
-        // }
+    update: (data) => {
+        var { ord, options } = data
+        Autocomplete.optionsByField[ord] = options
+        Autocomplete.acInstances[ord].start()
     },
 
     setupAuto: () => {
-
-        if (Autocomplete.acInstances.length !== 0) return
+        if (document.body.hasAttribute("has-autocomplete")) return
+        document.body.setAttribute("has-autocomplete", "")
 
         forEditorField([], (field) => {
             var editable = field.editingArea.editable
+            var ord = field.editingArea.ord
 
             style = document.createElement("style")
             style.innerHTML = css
@@ -93,9 +79,12 @@ var Autocomplete = {
 
             var ac = new autoComplete({ 
                 selector: () => { return editable },
-                placeHolder: "Search for Food...",
                 data: {
-                    src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"]
+                    src: () => { return Autocomplete.optionsByField[ord] },
+                    filter: (options) => {
+                        var result = options.filter( x => x.value.replace(' ', '') != '' )
+                        return result
+                    },
                 },
                 resultItem: {
                     highlight: {
@@ -110,6 +99,7 @@ var Autocomplete = {
                             editable.fieldHTML = selection;
                         },
                         focus: (event) => {
+                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
                             ac.open()
                         }
                     },
@@ -129,6 +119,7 @@ var Autocomplete = {
             })
 
             Autocomplete.acInstances.push(ac)
+            Autocomplete.optionsByField.push([])
         })
     },
 

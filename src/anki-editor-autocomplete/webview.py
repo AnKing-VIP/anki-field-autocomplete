@@ -25,27 +25,11 @@ def handle_bridge_command(handled, cmd, context):
 
     editor: Editor = context
 
-    (type, jsonText) = cmd.split(":", 1)
-    result = json.loads(jsonText)
-    text = editor.mungeHTML(result["text"])
+    (_, jsonText) = cmd.split(":", 1)
+    data = json.loads(jsonText)
+    ord = data["ord"]
 
-    # Work-around: delete all symbols from the search
-    text = RE_SUB_INVALID("", text)
-
-    if editor.currentField is None:
-        return handled
-
-    # bail out if the user hasn't actually changed the field
-    previous = "%d:%s" % (editor.currentField, text)
-    if prevAutocomplete == previous:
-        return handled
-    prevAutocomplete = previous
-
-    if text == "" or len(text) > 500 or editor.note is None:
-        editor.web.eval("$('.autocomplete').remove();")
-        return handled
-
-    field = editor.note.note_type()["flds"][editor.currentField]
+    field = editor.note.note_type()["flds"][ord]
 
     if field["name"] in noAutocompleteFields:
         field["no_autocomplete"] = True
@@ -53,34 +37,23 @@ def handle_bridge_command(handled, cmd, context):
     if "no_autocomplete" in list(field.keys()) and field["no_autocomplete"]:
         return handled
 
-    # find a value from the same model and field whose
-    # prefix is what the user typed so far
     model_name = editor.note.note_type()["name"]
-    field_name = field["name"]
-    query = f'note:"{model_name}" "{field_name}:{text}*"'
-    # query = "'note:%s' '%s:%s*'" % (
-    # editor.note.model()['name'],
-    # field['name'],
-    # text)
-
+    query = f'note:"{model_name}"'
     col = editor.note.col
-    res = col.find_cards(query, order=True)
+    nids = col.find_notes(query)
 
-    if len(res) == 0:
-        editor.web.eval("$('.autocomplete').remove();")
-        return handled
+    options = [
+        col.get_note(nid).fields[ord]
+        for nid in nids
+    ]
 
-    # pull out the full value
-    value = col.getCard(res[0]).note().fields[editor.currentField]
+    data = {
+        "options" : options,
+        "ord" : ord,
+    }
 
-    escaped = json.dumps(value)
-
-    print(res)
-    print(value)
-    print(escaped)
-    print()
-
-    editor.web.eval(f"Autocomplete.update({escaped})")
+    print(options)
+    editor.web.eval(f"Autocomplete.update({json.dumps(data)})")
 
     return handled
 
