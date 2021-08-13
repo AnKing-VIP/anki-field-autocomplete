@@ -13,6 +13,11 @@ var Autocomplete = {
     update: (data) => {
         var { ord, options } = data
         Autocomplete.optionsByField.set(ord, options)
+
+        var ac = Autocomplete.acByField.get(ord)
+        if(!ac.list.hasAttribute('hidden')){
+            ac.start()
+        }
     }, 
 
     setupAcs: (enabledFields) => {
@@ -69,7 +74,7 @@ var Autocomplete = {
             events: {
                 input: {
                     init: (event) => {
-                        globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
+                        globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord}, "text" : "" }`)
                     },
                     focus: (event) => {
                         ac.start();
@@ -102,6 +107,10 @@ var Autocomplete = {
             query: (input) => {
                 return input.replace("<br>", "");
             },
+        })
+
+        ac.input.addEventListener('input', () => {
+            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord}, "text" : ${JSON.stringify(editable.fieldHTML)} }`)
         })
 
         Autocomplete.acByField.set(ord, ac)

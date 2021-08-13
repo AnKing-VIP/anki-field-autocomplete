@@ -8,6 +8,7 @@ from aqt.editor import Editor
 from .config import remove, set
 from .utils import distinct
 
+# limit for options sent to autocomplete.js at once
 MAXIMUM_OPTION_AMOUNT = 20
 
 mw.addonManager.setWebExports(__name__, r"(web|icons)/.*\.(js|css|png)")
@@ -45,15 +46,16 @@ def handle_update_ac_settings(cmd, editor):
     return True
 
 
-def handle_autocomplete(cmd, editor: Editor):
-    global prevAutocomplete
-
+def handle_autocomplete(cmd, editor : Editor):
     _, jsonText = cmd.split(":", 1)
     data = json.loads(jsonText)
     ord = data["ord"]
+    text = data["text"]
 
-    model_name = editor.note.note_type()["name"]
-    query = f'note:"{model_name}"'
+    note_type = editor.note.note_type()
+    note_type_name = note_type["name"]
+    fld_name = next(x["name"] for x in note_type["flds"] if x["ord"] == ord)
+    query = f'note:"{note_type_name}" "{fld_name}:{text}*"'
     col = editor.note.col
     nids = col.find_notes(query)
 
