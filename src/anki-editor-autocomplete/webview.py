@@ -52,7 +52,6 @@ def handle_bridge_command(handled, cmd, context):
         "ord" : ord,
     }
 
-    print(options)
     editor.web.eval(f"Autocomplete.update({json.dumps(data)})")
 
     return handled

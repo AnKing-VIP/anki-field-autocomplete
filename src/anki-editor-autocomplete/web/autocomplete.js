@@ -1,4 +1,19 @@
 css = `
+.no_result {
+    padding: 10px 20px;
+    list-style: none;
+    text-align: left;
+    font-size: 13px;
+    color: #212121;
+    transition: all .1s ease-in-out;
+    border-radius: 3px;
+    background-color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all .2s ease
+}
+
 .autoComplete_results {
     max-height: 226px;
     overflow-y: scroll;
@@ -62,8 +77,8 @@ var Autocomplete = {
     update: (data) => {
         var { ord, options } = data
         Autocomplete.optionsByField[ord] = options
-        Autocomplete.acInstances[ord].start()
-    },
+        // Autocomplete.acInstances[ord].start()
+    }, 
 
     setupAuto: () => {
         if (document.body.hasAttribute("has-autocomplete")) return
@@ -94,27 +109,37 @@ var Autocomplete = {
                 wrapper: false,
                 events: {
                     input: {
+                        init: (event) => {
+                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
+                        },
+                        focus: (event) => {
+                            ac.start();
+                        },
                         selection: (event) => {
                             const selection = event.detail.selection.value;
                             editable.fieldHTML = selection;
                         },
-                        focus: (event) => {
-                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
-                            ac.open()
-                        }
                     },
-                },
-                trigger: (query) => {
-                    return true;
                 },
                 threshold: 0,
                 resultsList: {
                     tag: "ul",
                     class: "autoComplete_results",
+                    tabSelect: true,
+                    noResults: true,
+                    element: (list, data) => {
+                        if (!data.results.length) {
+                            const message = document.createElement("div");
+                            message.setAttribute("class", "no_result");
+                            message.innerHTML = `<span>no results"</span>`;
+                            list.appendChild(message);
+                        }
+                    },
                     // position: "afterend",
                     // maxResults: 5,
-                    // noResults: true,
-                    tabSelect: true,
+                },
+                query: (input) => {
+                    return input.replace("<br>", "");
                 },
             })
 
