@@ -81,8 +81,11 @@ var Autocomplete = {
     }, 
 
     setupAuto: () => {
-        if (document.body.hasAttribute("has-autocomplete")) return
-        document.body.setAttribute("has-autocomplete", "")
+        for(x of Autocomplete.acInstances){
+            x.unInit()
+        }
+        Autocomplete.acInstances = []
+        Autocomplete.optionsByField = []
 
         forEditorField([], (field) => {
             var editable = field.editingArea.editable
