@@ -21,16 +21,12 @@ def handle_bridge_commands(handled, cmd, context):
 
     if cmd.startswith("autocomplete"):
         if handle_autocomplete(cmd, editor):
-            return handled  # XXX change this
-        else:
-            return handled
+            return (True, None)
     elif cmd.startswith("update_ac_settings"):
         if handle_update_ac_settings(cmd, editor):
-            return handled  # XXX change this
-        else:
-            return handled
-    else:
-        return handled
+            return (True, None)
+
+    return handled
 
 
 def handle_update_ac_settings(cmd, editor):
