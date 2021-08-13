@@ -87,8 +87,7 @@ var Autocomplete = {
                         list.appendChild(message);
                     }
                 },
-                // position: "afterend",
-                // maxResults: 5,
+                maxResults: 10,
             },
             query: (input) => {
                 return input.replace("<br>", "");
