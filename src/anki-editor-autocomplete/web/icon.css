@@ -1,0 +1,30 @@
+:root {
+    --black: invert(0%) sepia(82%) saturate(7429%) hue-rotate(51deg) brightness(85%) contrast(117%);
+    --white: invert(100%) sepia(0%) saturate(1681%) hue-rotate(312deg) brightness(102%) contrast(102%);
+    --green: invert(49%) sepia(90%) saturate(408%) hue-rotate(71deg) brightness(88%) contrast(91%);
+    --lime: invert(74%) sepia(60%) saturate(1880%) hue-rotate(40deg) brightness(105%) contrast(107%);
+}
+
+.ac-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 3px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    filter: var(--green);
+}
+
+.enabled {
+    background-image: url('../icons/closed.png');
+}
+
+
+.disabled {
+    background-image: url('../icons/open.png');
+}
+
+.nightMode .ac-icon {
+    filter: var(--lime);
+}

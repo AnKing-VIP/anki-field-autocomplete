@@ -1,11 +1,11 @@
 import json
-import re
 from pathlib import Path
 
-from aqt import gui_hooks, mw
 import aqt
+from aqt import gui_hooks, mw
 from aqt.editor import Editor
 
+from .config import set, remove
 
 noAutocompleteFields = []
 prevAutocomplete = ""
@@ -13,16 +13,44 @@ prevAutocomplete = ""
 mw.addonManager.setWebExports(__name__, r"(web|icons)/.*\.(js|css|png)")
 
 
-def handle_bridge_command(handled, cmd, context):
+def handle_bridge_commands(handled, cmd, context):
     if not isinstance(context, Editor):
         return handled
 
-    if not cmd.startswith("autocomplete"):
+    editor: Editor = context
+
+    if cmd.startswith("autocomplete"):
+        if handle_autocomplete(cmd, editor):
+            return handled  # XXX change this
+        else:
+            return handled
+    elif cmd.startswith("update_ac_settings"):
+        if handle_update_ac_settings(cmd, editor):
+            return handled  # XXX change this
+        else:
+            return handled
+    else:
         return handled
 
-    global prevAutocomplete
 
-    editor: Editor = context
+def handle_update_ac_settings(cmd, editor):
+    (_, jsonText) = cmd.split(":", 1)
+    data = json.loads(jsonText)
+    ord, enabled = data.values()
+
+    note_type = editor.note.note_type()
+    fld = next(x for x in note_type['flds'] if x['ord'] == ord)
+    id = f'{note_type["id"]} {fld["name"]}'
+    if enabled:
+        set(id, True)
+    else:
+        remove(id)
+
+    return True
+
+
+def handle_autocomplete(cmd, editor):
+    global prevAutocomplete
 
     (_, jsonText) = cmd.split(":", 1)
     data = json.loads(jsonText)
@@ -34,7 +62,7 @@ def handle_bridge_command(handled, cmd, context):
         field["no_autocomplete"] = True
 
     if "no_autocomplete" in list(field.keys()) and field["no_autocomplete"]:
-        return handled
+        return False
 
     model_name = editor.note.note_type()["name"]
     query = f'note:"{model_name}"'
@@ -53,7 +81,7 @@ def handle_bridge_command(handled, cmd, context):
 
     editor.web.eval(f"Autocomplete.update({json.dumps(data)})")
 
-    return handled
+    return True
 
 
 def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
@@ -78,4 +106,4 @@ def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
 
 def init_webview():
     gui_hooks.webview_will_set_content.append(load_autocomplete_js)
-    gui_hooks.webview_did_receive_js_message.append(handle_bridge_command)
+    gui_hooks.webview_did_receive_js_message.append(handle_bridge_commands)

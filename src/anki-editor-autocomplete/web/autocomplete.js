@@ -1,84 +1,163 @@
 var Autocomplete = {
-    acInstances : [],
-    optionsByField : [],
+    acByField : null,
+    optionsByField : null,
+    enabledFields: [],
+    icons: [],
+
+    setup: (enabledFields) => {
+        Autocomplete.enabledFields = enabledFields
+        Autocomplete.setupAcs(enabledFields)
+        Autocomplete.setupIcons(enabledFields)
+    },
 
     update: (data) => {
         var { ord, options } = data
-        Autocomplete.optionsByField[ord] = options
-        // Autocomplete.acInstances[ord].start()
+        Autocomplete.optionsByField.set(ord, options)
     }, 
 
-    setup: () => {
-        for(x of Autocomplete.acInstances){
-            x.unInit()
-            delete x
+    setupAcs: (enabledFields) => {
+
+        if (Autocomplete.acByField != null){
+            for(let ord of Autocomplete.acByField.keys()){
+                Autocomplete.removeAc(ord)
+            }
         }
-        Autocomplete.acInstances = []
-        Autocomplete.optionsByField = []
+
+        Autocomplete.acByField = new Map()
+        Autocomplete.optionsByField = new Map()
 
         forEditorField([], (field) => {
-            var editable = field.editingArea.editable
+
             var ord = field.editingArea.ord
+            if(!(enabledFields.includes(ord))) return
+            
+            Autocomplete.addAc(ord)
 
-            style = document.createElement("style")
-            style.innerHTML = css
-            field.editingArea.shadowRoot.insertBefore(style, editable)
-
-            var ac = new autoComplete({ 
-                selector: () => { return editable },
-                data: {
-                    src: () => { return Autocomplete.optionsByField[ord] },
-                    filter: (options) => {
-                        var result = options.filter( x => x.value.replace(' ', '') != '' )
-                        return result
-                    },
-                },
-                resultItem: {
-                    highlight: {
-                        render: true
-                    }
-                },
-                wrapper: false,
-                events: {
-                    input: {
-                        init: (event) => {
-                            globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
-                        },
-                        focus: (event) => {
-                            ac.start();
-                        },
-                        selection: (event) => {
-                            const selection = event.detail.selection.value;
-                            editable.fieldHTML = selection;
-                        },
-                    },
-                },
-                threshold: 0,
-                resultsList: {
-                    tag: "ul",
-                    class: "autoComplete_results",
-                    tabSelect: true,
-                    noResults: true,
-                    element: (list, data) => {
-                        if (!data.results.length) {
-                            const message = document.createElement("div");
-                            message.setAttribute("class", "no_result");
-                            message.innerHTML = `<span>no results</span>`;
-                            list.appendChild(message);
-                        }
-                    },
-                    // position: "afterend",
-                    // maxResults: 5,
-                },
-                query: (input) => {
-                    return input.replace("<br>", "");
-                },
-            })
-
-            Autocomplete.acInstances.push(ac)
-            Autocomplete.optionsByField.push([])
         })
     },
+
+    addAc: (ord) => {
+        var field = globalThis.getEditorField(ord)
+        var editable = field.editingArea.editable
+
+        style = document.createElement("style")
+        style.innerHTML = css
+        field.editingArea.shadowRoot.insertBefore(style, editable)
+
+        var ac = new autoComplete({ 
+            selector: () => { return editable },
+            data: {
+                src: () => { return Autocomplete.optionsByField.get(ord) },
+                filter: (options) => {
+                    var result = options.filter( x => x.value.replace(' ', '') != '' )
+                    return result
+                },
+            },
+            resultItem: {
+                highlight: {
+                    render: true
+                }
+            },
+            wrapper: false,
+            events: {
+                input: {
+                    init: (event) => {
+                        globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord} }`)
+                    },
+                    focus: (event) => {
+                        ac.start();
+                    },
+                    selection: (event) => {
+                        const selection = event.detail.selection.value;
+                        editable.fieldHTML = selection;
+                    },
+                },
+            },
+            threshold: 0,
+            resultsList: {
+                tag: "ul",
+                class: "autoComplete_results",
+                tabSelect: true,
+                noResults: true,
+                element: (list, data) => {
+                    if (!data.results.length) {
+                        const message = document.createElement("div");
+                        message.setAttribute("class", "no_result");
+                        message.innerHTML = `<span>no results</span>`;
+                        list.appendChild(message);
+                    }
+                },
+                // position: "afterend",
+                // maxResults: 5,
+            },
+            query: (input) => {
+                return input.replace("<br>", "");
+            },
+        })
+
+        Autocomplete.acByField.set(ord, ac)
+        Autocomplete.optionsByField.set(ord, [])
+    },
+
+    removeAc: (ord) => {
+        var ac = Autocomplete.acByField.get(ord)
+        ac.unInit()
+        delete ac
+
+        Autocomplete.acByField.delete(ord)
+        Autocomplete.optionsByField.delete(ord)
+    },
+
+    toggleAc: (ord) => {
+        if(Autocomplete.enabledFields.includes(ord)){
+            Autocomplete.enabledFields.splice(Autocomplete.enabledFields.indexOf(ord), 1)
+            Autocomplete.icons[ord].classList.remove('enabled')
+            Autocomplete.icons[ord].classList.add('disabled')
+            Autocomplete.removeAc(ord)
+            globalThis.bridgeCommand(`update_ac_settings:{"ord" : ${ord}, "val" : false}`)
+        } else {
+            Autocomplete.enabledFields.push(ord)
+            Autocomplete.icons[ord].classList.remove('disabled')
+            Autocomplete.icons[ord].classList.add('enabled')
+            Autocomplete.addAc(ord)
+            globalThis.bridgeCommand(`update_ac_settings:{"ord" : ${ord}, "val" : true}`)
+        }
+    },
+
+    setupIcons: (enabledFields) => {
+
+        for(let icon of Autocomplete.icons){
+            icon.remove()
+        }
+        Autocomplete.icons = []
+
+        forEditorField([], (field) => {
+            const ord = field.editingArea.ord
+
+            const icon = document.createElement('span')
+            icon.classList.add('ac-icon')
+            icon.addEventListener('click', () => {
+                Autocomplete.toggleAc(ord)
+            })
+            Autocomplete.addIconToPage(field, icon)
+            Autocomplete.icons.push(icon)
+
+            if(enabledFields.includes(ord)){
+                icon.classList.add('enabled')
+            } else {
+                icon.classList.add('disabled')
+            }
+        })
+    },
+
+    addIconToPage: (field, icon) => {
+        field.labelContainer.insertBefore(icon, field.labelContainer.label.nextSibling)
+        field.labelContainer.style.setProperty("justify-content", "flex-end")
+
+        // move label back to the left
+        field.labelContainer.label.style.setProperty("margin-right", "auto")
+    },
+
 }
 
 
@@ -152,4 +231,5 @@ css = `
 .autoComplete_results>li[aria-selected=true] {
     background-color: rgba(123, 123, 123, .1)
 }
+
 `
