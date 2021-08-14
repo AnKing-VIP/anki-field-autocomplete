@@ -5,7 +5,8 @@ import aqt
 from aqt import gui_hooks, mw
 from aqt.editor import Editor
 
-from .config import set, remove
+from .config import remove, set
+from .utils import distinct
 
 MAXIMUM_OPTION_AMOUNT = 20
 
@@ -44,7 +45,7 @@ def handle_update_ac_settings(cmd, editor):
     return True
 
 
-def handle_autocomplete(cmd, editor : Editor):
+def handle_autocomplete(cmd, editor: Editor):
     global prevAutocomplete
 
     _, jsonText = cmd.split(":", 1)
@@ -56,11 +57,16 @@ def handle_autocomplete(cmd, editor : Editor):
     col = editor.note.col
     nids = col.find_notes(query)
 
-    nids = nids[:MAXIMUM_OPTION_AMOUNT]
-    options = [
+    options = []
+    options_iter = distinct(
         col.get_note(nid).fields[ord]
         for nid in nids
-    ]
+    )
+    while len(options) != MAXIMUM_OPTION_AMOUNT:
+        option = next(options_iter, None)
+        if not option:
+            break
+        options.append(option)
 
     data = {
         "options": options,
