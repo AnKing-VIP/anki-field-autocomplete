@@ -105,7 +105,7 @@ var Autocomplete = {
                 maxResults: 10,
             },
             query: (input) => {
-                return input.replace("<br>", "");
+                return input.replace("<br>", "").replace('&nbsp;', ' ');
             },
         })
 

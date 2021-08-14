@@ -50,7 +50,7 @@ def handle_autocomplete(cmd, editor : Editor):
     _, jsonText = cmd.split(":", 1)
     data = json.loads(jsonText)
     ord = data["ord"]
-    text = data["text"]
+    text = data["text"].replace('&nbsp;', ' ')
 
     note_type = editor.note.note_type()
     note_type_name = note_type["name"]
