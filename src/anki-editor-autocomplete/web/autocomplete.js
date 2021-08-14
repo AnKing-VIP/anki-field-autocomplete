@@ -40,9 +40,16 @@ var Autocomplete = {
         var field = globalThis.getEditorField(ord)
         var editable = field.editingArea.editable
 
-        style = document.createElement("style")
-        style.innerHTML = css
-        field.editingArea.shadowRoot.insertBefore(style, editable)
+        var listWrapper = field.editingArea.shadowRoot.querySelector('#list_wrapper')
+        if (!listWrapper){
+            listWrapper = document.createElement('span')
+            listWrapper.id = 'list_wrapper'
+            field.editingArea.shadowRoot.appendChild(listWrapper)
+
+            var style = document.createElement("style")
+            style.innerHTML = css
+            field.editingArea.shadowRoot.insertBefore(style, editable)
+        }
 
         var ac = new autoComplete({ 
             selector: () => { return editable },
@@ -75,6 +82,9 @@ var Autocomplete = {
             },
             threshold: 0,
             resultsList: {
+                destination: () => { 
+                    return listWrapper 
+                },
                 tag: "ul",
                 class: "autoComplete_results",
                 tabSelect: true,
@@ -176,7 +186,13 @@ css = `
     transition: all .2s ease
 }
 
+#list_wrapper {
+    position: relative;
+    display: block;
+}
+
 .autoComplete_results {
+    position: absolute;
     max-height: 226px;
     overflow-y: scroll;
     top: 100%;

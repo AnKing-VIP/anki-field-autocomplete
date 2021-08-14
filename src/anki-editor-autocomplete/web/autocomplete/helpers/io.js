@@ -24,7 +24,8 @@ const create = (tag, options) => {
     if (key === "inside") {
       val.append(el);
     } else if (key === "dest") {
-      select(val[0]).insertAdjacentElement(val[1], el);
+      var dest = select(val[0])
+      dest.appendChild(el);
     } else if (key === "around") {
       const ref = val;
       ref.parentNode.insertBefore(el, ref);

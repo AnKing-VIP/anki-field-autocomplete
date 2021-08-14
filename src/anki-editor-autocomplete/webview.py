@@ -47,7 +47,7 @@ def handle_update_ac_settings(cmd, editor):
 def handle_autocomplete(cmd, editor : Editor):
     global prevAutocomplete
 
-    _, jsonText = cmd.split(":")
+    _, jsonText = cmd.split(":", 1)
     data = json.loads(jsonText)
     ord = data["ord"]
 
