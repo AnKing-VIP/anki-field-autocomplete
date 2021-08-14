@@ -120,6 +120,7 @@ var Autocomplete = {
     removeAc: (ord) => {
         var ac = Autocomplete.acByField.get(ord)
         ac.unInit()
+        ac.list.remove()
         delete ac
 
         Autocomplete.acByField.delete(ord)
