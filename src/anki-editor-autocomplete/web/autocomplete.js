@@ -185,7 +185,8 @@ css = `
     list-style: none;
     text-align: left;
     font-size: 13px;
-    color: #212121;
+    font-style: italic;
+    color: #747474;
     transition: all .1s ease-in-out;
     border-radius: 3px;
     background-color: #fff;
@@ -208,7 +209,7 @@ css = `
     left: 0;
     right: 0;
     padding: 0;
-    margin: .5rem 0 0 0;
+    margin: .15rem 0 0 0;
     border-radius: 4px;
     background-color: #fff;
     border: 1px solid rgba(33, 33, 33, .1);
@@ -220,7 +221,7 @@ css = `
     padding: 10px 20px;
     list-style: none;
     text-align: left;
-    font-size: 16px;
+    font-size: 13px;
     color: #212121;
     transition: all .1s ease-in-out;
     border-radius: 3px;
@@ -238,7 +239,7 @@ css = `
 
 .autoComplete_results>li:hover {
     cursor: pointer;
-    background-color: rgba(123, 123, 123, .1)
+    background-color: rgba(49, 49, 49, 0.2)
 }
 
 .autoComplete_results>li mark {
@@ -253,7 +254,7 @@ css = `
 }
 
 .autoComplete_results>li[aria-selected=true] {
-    background-color: rgba(123, 123, 123, .1)
+    background-color: rgba(123, 123, 123, .4)
 }
 
 `
