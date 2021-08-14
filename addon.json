@@ -1,7 +1,7 @@
 {
-    "display_name": "anki-editor-autocomplete",
-    "module_name": "anki-editor-autocomplete",
-    "repo_name": "anki-editor-autocomplete",
+    "display_name": "field-autocomplete",
+    "module_name": "field-autocomplete",
+    "repo_name": "field-autocomplete",
     "ankiweb_id": "",
     "author": "RisingOrange",
     "conflicts": [],
