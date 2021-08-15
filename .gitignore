@@ -8,3 +8,6 @@ tools/
 meta.json
 
 src/*/__pycache__/
+
+.qt_for_python/
+src/*/gui/
