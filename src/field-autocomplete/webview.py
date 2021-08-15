@@ -70,7 +70,7 @@ def handle_autocomplete(cmd, editor : Editor):
     )
     while len(options) != MAXIMUM_OPTION_AMOUNT:
         option = next(options_iter, None)
-        if not option:
+        if option is None:
             break
         options.append(option)
 
