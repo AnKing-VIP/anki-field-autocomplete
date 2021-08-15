@@ -3,11 +3,17 @@ var Autocomplete = {
     optionsByField : null,
     enabledFields: [],
     icons: [],
+    looseSearch: null,
 
-    setup: (enabledFields) => {
+    setup: (options) => {
+        enabledFields = options['ords']
+        looseSearch = options['looseSearch']
+
         Autocomplete.enabledFields = enabledFields
         Autocomplete.setupAcs(enabledFields)
         Autocomplete.setupIcons(enabledFields)
+
+        Autocomplete.looseSearch = looseSearch
     },
 
     update: (data) => {
@@ -65,6 +71,7 @@ var Autocomplete = {
                     return result
                 },
             },
+            searchEngine: "loose" ? Autocomplete.looseSearch : "strict",
             resultItem: {
                 highlight: {
                     render: true

@@ -1,6 +1,9 @@
+import json
+
 from aqt import editor, gui_hooks
 
 from .config import get
+from .user_config import getUserOption
 
 
 def setup_ac(editor):
@@ -13,12 +16,16 @@ def setup_ac(editor):
         if enabled:
             enabled_field_ords += [fld['ord']]
 
-    editor.web.eval(f'Autocomplete.setup({enabled_field_ords})')
+    data = {
+        "ords" : enabled_field_ords,
+        "looseSearch" : getUserOption('search_mode_loose', refresh=True)
+    }
+    editor.web.eval(f'Autocomplete.setup({json.dumps(data)})')
 
 
 def add_ac_toggle_shortcut(shortcuts, editor: editor.Editor):
     shortcuts.append((
-        'F4',
+        getUserOption('toggle_ac_shortcut', refresh=True),
         lambda: editor.web.eval(f'Autocomplete.toggleAc({editor.currentField})')
     ))
 
