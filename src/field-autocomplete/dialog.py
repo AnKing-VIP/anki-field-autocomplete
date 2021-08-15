@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from .gui.forms.anki21.settings_dialog import Ui_Dialog
-from .gui.resources.anki21 import icons_rc # type: ignore
+from .gui.resources.anki21 import icons_rc  # type: ignore
 from .user_config import getDefaultConfig, getUserOption, writeConfig
 
 conf = getUserOption()
