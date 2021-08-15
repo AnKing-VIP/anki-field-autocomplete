@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from .gui.forms.anki21.settings_dialog import Ui_Dialog
-from .gui.resources.anki21 import icons_rc
+from .gui.resources.anki21 import icons_rc # type: ignore
 from .user_config import getDefaultConfig, getUserOption, writeConfig
 
 conf = getUserOption()
@@ -36,7 +36,7 @@ class SettingsDialog(QDialog):
         f = self.form
 
         # Checkboxes -------------
-        c = conf['search_mode_loose']
+        c = conf['loose_search']
         if f.checkBox_search_mode.isChecked() != c:
             f.checkBox_search_mode.click()
 
@@ -60,7 +60,7 @@ class SettingsDialog(QDialog):
             lambda _: self.openWeb("facebook"))
 
         controller = {
-            f.checkBox_search_mode: ("search_mode_loose",),
+            f.checkBox_search_mode: ("loose_search",),
         }
         for cb, args in controller.items():
             cb.stateChanged.connect(

@@ -56,7 +56,7 @@ def handle_autocomplete(cmd, editor : Editor):
     note_type = editor.note.note_type()
     note_type_name = note_type["name"]
     fld_name = next(x["name"] for x in note_type["flds"] if x["ord"] == ord)
-    if getUserOption('search_mode_loose', refresh=True):
+    if getUserOption('loose_search', refresh=True):
         query = f'note:"{note_type_name}" "{fld_name}:*{text}*"'
     else:
         query = f'note:"{note_type_name}" "{fld_name}:{text}*"'

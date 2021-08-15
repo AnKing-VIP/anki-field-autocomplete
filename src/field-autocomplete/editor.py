@@ -18,7 +18,7 @@ def setup_ac(editor):
 
     data = {
         "ords" : enabled_field_ords,
-        "looseSearch" : getUserOption('search_mode_loose', refresh=True)
+        "looseSearch" : getUserOption('loose_search', refresh=True)
     }
     editor.web.eval(f'Autocomplete.setup({json.dumps(data)})')
 
