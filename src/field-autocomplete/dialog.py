@@ -54,6 +54,7 @@ class SettingsDialog(QDialog):
         f.toolButton_website.clicked.connect(lambda _: self.openWeb("anking"))
         f.toolButton_youtube.clicked.connect(lambda _: self.openWeb("youtube"))
         f.toolButton_patreon.clicked.connect(lambda _: self.openWeb("patreon"))
+        f.toolButton_palace.clicked.connect(lambda _: self.openWeb("palace"))
         f.toolButton_instagram.clicked.connect(
             lambda _: self.openWeb("instagram"))
         f.toolButton_facebook.clicked.connect(
@@ -85,6 +86,8 @@ class SettingsDialog(QDialog):
             webbrowser.open('https://facebook.com/ankingmed')
         elif site == "video":        
             webbrowser.open('https://youtu.be/5XAq0KpU3Jc')
+        elif site == "palace":        
+            webbrowser.open('https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
 
     def _updateCheckbox(self, cb, key):
         n = -1 if cb == 2 else 1

@@ -6,102 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>211</height>
+    <width>496</width>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Custom Background Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
-   <item row="0" column="3" colspan="2">
-    <widget class="QToolButton" name="toolButton_patreon">
-     <property name="maximumSize">
-      <size>
-       <width>171</width>
-       <height>26</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>...</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Patreon.png</normaloff>:/CustomBackground/Patreon.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>200</width>
-       <height>31</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="8">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QCheckBox" name="checkBox_search_mode">
-       <property name="text">
-        <string>Loose search (Strict search when unchecked)</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="title">
-        <string/>
-       </property>
-       <widget class="QLabel" name="label">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>438</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Toggle autocomplete shortcut</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="toggle_ac_shortcut_lineedit">
-        <property name="geometry">
-         <rect>
-          <x>12</x>
-          <y>40</y>
-          <width>431</width>
-          <height>26</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="4" colspan="3">
-    <widget class="QPushButton" name="RestoreButton">
-     <property name="text">
-      <string>Restore Default</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="5">
-    <widget class="QToolButton" name="toolButton_instagram">
+   <item row="0" column="6">
+    <widget class="QToolButton" name="toolButton_facebook">
      <property name="maximumSize">
       <size>
        <width>31</width>
@@ -113,7 +27,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Instagram.png</normaloff>:/CustomBackground/Instagram.png</iconset>
+       <normaloff>:/CustomBackground/Facebook.png</normaloff>:/CustomBackground/Facebook.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -146,8 +60,15 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="6">
-    <widget class="QToolButton" name="toolButton_facebook">
+   <item row="7" column="4" colspan="3">
+    <widget class="QPushButton" name="RestoreButton">
+     <property name="text">
+      <string>Restore Default</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="QToolButton" name="toolButton_instagram">
      <property name="maximumSize">
       <size>
        <width>31</width>
@@ -159,20 +80,13 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Facebook.png</normaloff>:/CustomBackground/Facebook.png</iconset>
+       <normaloff>:/CustomBackground/Instagram.png</normaloff>:/CustomBackground/Instagram.png</iconset>
      </property>
      <property name="iconSize">
       <size>
        <width>31</width>
        <height>31</height>
       </size>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="7">
-    <widget class="QPushButton" name="OkButton">
-     <property name="text">
-      <string>OK</string>
      </property>
     </widget>
    </item>
@@ -199,6 +113,140 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="3" colspan="2">
+    <widget class="QToolButton" name="toolButton_patreon">
+     <property name="maximumSize">
+      <size>
+       <width>171</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/icons.qrc">
+       <normaloff>:/CustomBackground/Patreon.png</normaloff>:/CustomBackground/Patreon.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>200</width>
+       <height>31</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="7">
+    <widget class="QPushButton" name="OkButton">
+     <property name="text">
+      <string>OK</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" rowspan="2" colspan="8">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>8</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_search_mode">
+       <property name="text">
+        <string>Loose search (Strict search when unchecked)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>438</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Toggle autocomplete shortcut</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="toggle_ac_shortcut_lineedit">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>40</y>
+          <width>231</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QToolButton" name="toolButton_palace">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources/icons.qrc">
+           <normaloff>:/CustomBackground/AnkiPalace_no_text.png</normaloff>:/CustomBackground/AnkiPalace_no_text.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Interested in learning how to use Anki effectively? Check out AnkiPalace, a comprehensive series of lessons and video tutorials on Anki designed by the AnKing team.
+</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
   </layout>
   <zorder>RestoreButton</zorder>
   <zorder>toolButton_patreon</zorder>
@@ -207,6 +255,7 @@
   <zorder>toolButton_website</zorder>
   <zorder>toolButton_youtube</zorder>
   <zorder>OkButton</zorder>
+  <zorder></zorder>
  </widget>
  <resources>
   <include location="../resources/icons.qrc"/>
