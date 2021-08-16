@@ -165,7 +165,7 @@ var Autocomplete = {
             icon.addEventListener('click', () => {
                 Autocomplete.toggleAc(ord)
             })
-            Autocomplete.addIconToPage(field, icon)
+            Autocomplete.addIconToField(field, icon)
             Autocomplete.icons.push(icon)
 
             if(enabledFields.includes(ord)){
@@ -176,7 +176,7 @@ var Autocomplete = {
         })
     },
 
-    addIconToPage: (field, icon) => {
+    addIconToField: (field, icon) => {
         field.labelContainer.insertBefore(icon, field.labelContainer.label.nextSibling)
         field.labelContainer.style.setProperty("justify-content", "flex-end")
 
