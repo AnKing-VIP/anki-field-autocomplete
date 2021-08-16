@@ -178,9 +178,12 @@ def init_settings_dialog():
     menu_name = "&AnKing"
     menu = getMenu(mw, menu_name)
     submenu = getSubMenu(menu, "Get Anki Help")
-    for k, t, cb in MENU_OPTIONS:
+    for _, title, cb in MENU_OPTIONS:
+        if title in [x.text() for x in submenu.actions()]:
+            continue
+
         hk = QKeySequence()
-        act = QAction(t, mw)
+        act = QAction(title, mw)
         act.setShortcut(QKeySequence(hk))
         act.triggered.connect(cb)
         submenu.addAction(act)
