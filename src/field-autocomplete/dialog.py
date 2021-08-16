@@ -72,6 +72,20 @@ class SettingsDialog(QDialog):
         a.textChanged.connect(
             lambda t=a.text(): self._updateLineEdit(t, 'toggle_ac_shortcut'))
 
+    def openWeb(self, site):
+        if site == "anking":
+            webbrowser.open('https://www.ankingmed.com')
+        elif site == "youtube":        
+            webbrowser.open('https://www.youtube.com/theanking')
+        elif site == "patreon":        
+            webbrowser.open('https://www.patreon.com/ankingmed')
+        elif site == "instagram":        
+            webbrowser.open('https://instagram.com/ankingmed')
+        elif site == "facebook":        
+            webbrowser.open('https://facebook.com/ankingmed')
+        elif site == "video":        
+            webbrowser.open('https://youtu.be/5XAq0KpU3Jc')
+
     def _updateCheckbox(self, cb, key):
         n = -1 if cb == 2 else 1
         v = True if n == -1 else False
