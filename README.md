@@ -9,6 +9,12 @@ The search mode can be set to strict (default) or loose in the add-on settings. 
 
 This add-on is based on the [anki-editor-autocomplete](https://github.com/acecodes/anki-editor-autocomplete) add-on.
 
+## Screenshots
+![](screenshots/dropdown.gif)
+## strict search (default)
+![](screenshots/strict_search.gif)
+### loose search
+![](screenshots/loose_search.gif)
 
 <b>Problems, Bugs, Errors, Improvements</b>
 If you find a serious bug, please submit it on <a href="https://github.com/ankipalace/anki-field-autocomplete/issues" rel="nofollow">Github</a> or email us at ankingmed@gmail.com. Please remember that we are not coders and thus may not be able to provide support.
