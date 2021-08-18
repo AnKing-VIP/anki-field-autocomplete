@@ -20,7 +20,7 @@ This add-on is based on the [anki-editor-autocomplete](https://github.com/acecod
 If you find a serious bug, please submit it on <a href="https://github.com/ankipalace/anki-field-autocomplete/issues" rel="nofollow">Github</a> or email us at ankingmed@gmail.com. Please remember that we are not coders and thus may not be able to provide support.
 
 <b>Changelog</b>
-2020-8-16: Initial Release
+2021-8-16: Initial Release
 
 
 <b>Please consider checking out our:</b>
