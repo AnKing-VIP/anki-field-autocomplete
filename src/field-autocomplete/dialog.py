@@ -1,5 +1,3 @@
-import webbrowser
-
 from anki import version as anki_version
 from aqt import mw
 from aqt.utils import openLink
@@ -76,19 +74,20 @@ class SettingsDialog(QDialog):
 
     def openWeb(self, site):
         if site == "anking":
-            webbrowser.open('https://www.ankingmed.com')
-        elif site == "youtube":        
-            webbrowser.open('https://www.youtube.com/theanking')
-        elif site == "patreon":        
-            webbrowser.open('https://www.patreon.com/ankingmed')
-        elif site == "instagram":        
-            webbrowser.open('https://instagram.com/ankingmed')
-        elif site == "facebook":        
-            webbrowser.open('https://facebook.com/ankingmed')
-        elif site == "video":        
-            webbrowser.open('https://youtu.be/5XAq0KpU3Jc')
-        elif site == "palace":        
-            webbrowser.open('https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
+            openLink('https://www.ankingmed.com')
+        elif site == "youtube":
+            openLink('https://www.youtube.com/theanking')
+        elif site == "patreon":
+            openLink('https://www.patreon.com/ankingmed')
+        elif site == "instagram":
+            openLink('https://instagram.com/ankingmed')
+        elif site == "facebook":
+            openLink('https://facebook.com/ankingmed')
+        elif site == "video":
+            openLink('https://youtu.be/5XAq0KpU3Jc')
+        elif site == "palace":
+            openLink(
+                'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
 
     def _updateCheckbox(self, cb, key):
         n = -1 if cb == 2 else 1
@@ -140,7 +139,7 @@ def create_get_help_submenu(parent: QMenu) -> QMenu:
     menu_options = [
         (
             "Online Mastery Course",
-            "https://courses.ankipalace.com/?utm_source=anking_bg_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course",
+                'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course'
         ),
         ("Daily Q and A Support", "https://www.ankipalace.com/memberships"),
         ("1-on-1 Tutoring", "https://www.ankipalace.com/tutoring"),
