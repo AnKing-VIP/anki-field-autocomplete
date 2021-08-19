@@ -12,7 +12,8 @@ from .utils import distinct
 # limit for options sent to autocomplete.js at once
 MAXIMUM_OPTION_AMOUNT = 20
 
-mw.addonManager.setWebExports(__name__, r"(web|icons)/.*\.(js|css|png)")
+name = __name__.split('.', 1)[0]
+mw.addonManager.setWebExports(name, r"(web|icons)/.*\.(js|css|png)")
 
 
 def handle_bridge_commands(handled, cmd, context):
@@ -84,24 +85,17 @@ def handle_autocomplete(cmd, editor : Editor):
     return True
 
 
+def url_from_fname(file_name: str) -> str:
+    addon_package = mw.addonManager.addonFromModule(__name__)
+    return f"/_addons/{addon_package}/web/{file_name}"
+
 def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
-    if isinstance(context, Editor):
-        addon_package = context.mw.addonManager.addonFromModule(__name__)
-        base_path = Path(f"/_addons/{addon_package}/web")
+    if not isinstance(context, Editor):
+        return
 
-        webcontent.head += f'<script type="module" src="{str(base_path / "autocomplete/autoComplete.js")}"></script>'
-
-        addons_folder = Path(context.mw.addonManager.addonsFolder())
-        addons_dir = (addons_folder / addon_package / "web")
-        for file in addons_dir.glob('*.js'):
-            file = file.relative_to(addons_dir)
-            file = base_path / file
-            webcontent.js.append(str(file))
-
-        for file in addons_dir.glob('*.css'):
-            file = file.relative_to(addons_dir)
-            file = base_path / file
-            webcontent.css.append(str(file))
+    webcontent.head += f'<script type="module" src="{url_from_fname("autocomplete/autoComplete.js")}"></script>'
+    webcontent.js.append(url_from_fname("autocomplete.js"))
+    webcontent.css.append(url_from_fname("icon.css"))
 
 
 def init_webview():
