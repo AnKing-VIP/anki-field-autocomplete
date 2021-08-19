@@ -2,6 +2,7 @@ import webbrowser
 
 from anki import version as anki_version
 from aqt import mw
+from aqt.utils import openLink
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -134,38 +135,69 @@ class SettingsDialog(QDialog):
         # having to reload the web view.
 
 
-def openWeb1():
-    webbrowser.open(
-        'https://courses.ankipalace.com/?utm_source=anking_bg_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
+def create_get_help_submenu(parent: QMenu) -> QMenu:
+    submenu_name = "Get Anki Help"
+    menu_options = [
+        (
+            "Online Mastery Course",
+            "https://courses.ankipalace.com/?utm_source=anking_bg_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course",
+        ),
+        ("Daily Q and A Support", "https://www.ankipalace.com/memberships"),
+        ("1-on-1 Tutoring", "https://www.ankipalace.com/tutoring"),
+    ]
+    submenu = QMenu(submenu_name, parent)
+    for name, url in menu_options:
+        act = QAction(name, mw)
+        act.triggered.connect(lambda _: openLink(url))
+        submenu.addAction(act)
+    return submenu
 
 
-def openWeb2():
-    webbrowser.open('https://www.ankipalace.com/memberships')
+def maybe_add_get_help_submenu(menu: QMenu) -> None:
+    """Adds 'Get Anki Help' submenu in 'Anking' menu if needed.
+
+    The submenu is added if:
+     - The submenu does not exist in menu
+     - The submenu is an outdated version - existing is deleted
+
+    With versioning and anking_get_help property,
+    future version can rename, hide, or change contents in the submenu
+    """
+    submenu_property = "anking_get_help"
+    submenu_ver = 2
+    for act in menu.actions():
+        if act.property(submenu_property) or act.text() == "Get Anki Help":
+            ver = act.property("version")
+            if ver and ver >= submenu_ver:
+                return
+            submenu = create_get_help_submenu(menu)
+            menu.insertMenu(act, submenu)
+            menu.removeAction(act)
+            act.deleteLater()
+            new_act = submenu.menuAction()
+            new_act.setProperty(submenu_property, True)
+            new_act.setProperty("version", submenu_ver)
+            return
+    else:
+        submenu = create_get_help_submenu(menu)
+        menu.addMenu(submenu)
+        new_act = submenu.menuAction()
+        new_act.setProperty(submenu_property, True)
+        new_act.setProperty("version", submenu_ver)
 
 
-def openWeb3():
-    webbrowser.open('https://www.ankipalace.com/tutoring')
-
-
-def getMenu(parent, menuName):
-    menu = None
-    for a in parent.form.menubar.actions():
-        if menuName == a.text():
+def get_anking_menu() -> QMenu:
+    """Return AnKing menu. If it doesn't exist, create one. Make sure its submenus are up to date."""
+    menu_name = "&AnKing"
+    menubar = mw.form.menubar
+    for a in menubar.actions():
+        if menu_name == a.text():
             menu = a.menu()
             break
-    if not menu:
-        menu = parent.form.menubar.addMenu(menuName)
-    return menu
-
-
-def getSubMenu(menu, subMenuName):
-    for a in menu.actions():
-        if subMenuName == a.text():
-            return a.menu()
     else:
-        subMenu = QMenu(subMenuName, menu)
-        menu.addMenu(subMenu)
-        return subMenu
+        menu = menubar.addMenu(menu_name)
+    maybe_add_get_help_submenu(menu)
+    return menu
 
 
 def SettingsDialogExecute():
@@ -173,23 +205,7 @@ def SettingsDialogExecute():
 
 
 def init_settings_dialog():
-    MENU_OPTIONS = (  # CONF_KEY, TITLE, CALLBACK
-        ("", "Online Mastery Course", openWeb1),
-        ("", "Daily Q and A Support", openWeb2),
-        ("", "1-on-1 Tutoring", openWeb3)
-    )
-    menu_name = "&AnKing"
-    menu = getMenu(mw, menu_name)
-    submenu = getSubMenu(menu, "Get Anki Help")
-    for _, title, cb in MENU_OPTIONS:
-        if title in [x.text() for x in submenu.actions()]:
-            continue
-
-        hk = QKeySequence()
-        act = QAction(title, mw)
-        act.setShortcut(QKeySequence(hk))
-        act.triggered.connect(cb)
-        submenu.addAction(act)
+    menu = get_anking_menu()
     a = QAction("Field Autocomplete", mw)
     a.triggered.connect(SettingsDialogExecute)
     menu.addAction(a)
