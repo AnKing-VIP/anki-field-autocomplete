@@ -1,0 +1,43 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: version string (eg. 6.1)
+        required: true
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    # env:
+      # ADDON_FILE_NAME: review_hotmouse_v${{ github.event.inputs.version }}.ankiaddon
+    steps:
+      - uses: actions/checkout@v2
+        with: 
+          submodules: recursive
+      
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: 3.8
+      
+      - name: Install dependencies
+        run: python -m pip install git+git://github.com/glutanimate/anki-addon-builder.git@4039b5bb743773a18cb2911e6dd38fa1e3f65982
+          
+      - name: Commit changes to git
+        uses: EndBug/add-and-commit@v7.1.1
+        with:
+          message: Bump Version to v${{ github.event.inputs.version }}
+          tags: ${{ github.event.inputs.version }}
+        
+      - name: Create ankiaddon file
+        run: aab build -d ankiweb -t anki21
+      
+      - name: Create github release and upload ankiaddon file
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          repo_token: ${{ github.token }}
+          file: build/field-autocomplete-{{ github.event.inputs.version }}-anki21-ankiweb.ankiaddon
+          tag: ${{ github.event.inputs.version }}
+          release_name: Field Autocomplete v${{ github.event.inputs.version }}
