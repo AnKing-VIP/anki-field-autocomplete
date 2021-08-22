@@ -154,7 +154,7 @@ class MappedDialog(BasicDialog):
         > )
         """
         super().__init__(form_module=form_module, parent=parent, **kwargs)
-        self._mapped_widgets = mapped_widgets
+        self.mapped_widgets = mapped_widgets
         self._defaults = defaults
         self._data = data
         self.setData(data)
@@ -162,13 +162,13 @@ class MappedDialog(BasicDialog):
     # API
 
     def setData(self, data: dict):
-        for widget_name, properties in self._mapped_widgets:
+        for widget_name, properties in self.mapped_widgets:
             for key, property_dict in properties:
                 value = self._dataToWidgetVal(data, property_dict)
                 self.interface.set(widget_name, key, value)
 
     def getData(self) -> dict:
-        for widget_name, properties in self._mapped_widgets:
+        for widget_name, properties in self.mapped_widgets:
             for key, property_dict in properties:
                 data_path = self._dataPathToList(property_dict.get("dataPath", ""))
                 if not data_path:  # property irrelevant for config
