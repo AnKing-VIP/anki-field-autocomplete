@@ -36,24 +36,25 @@ Options dialog and associated components
 
 from aqt import mw
 from aqt.qt import *
+from aqt.utils import openLink
 
 from ..config import config
 from ..libaddon.anki import ANKI
 from ..libaddon.gui.dialogs.options import OptionsDialog
 from .forms.anki21 import options as qtform_options
 
-__all__ = ["RevHmOptions", "invokeOptionsDialog"]
 
-
-class RevHmOptions(OptionsDialog):
+class FieldACOptions(OptionsDialog):
 
     """
     Add-on-specific options dialog implementation
     """
 
     _mapped_widgets = (
-        ("form.checkBox_search_mode", (("value", {"dataPath": "synced/loose_search"}),)),
-        ("form.keyGrabToggle", (("value", {"dataPath": "profile/hotkeys/toggle"}),)),
+        ("form.checkBox_search_mode",
+         (("value", {"dataPath": "synced/loose_search"}),)),
+        ("form.keyGrabToggle",
+         (("value", {"dataPath": "profile/hotkeys/toggle"}),)),
     )
 
     def __init__(self, config, mw, parent=None, **kwargs):
@@ -63,7 +64,7 @@ class RevHmOptions(OptionsDialog):
         # beforehand:
         self.parent = parent or mw
         self.mw = mw
-        super(RevHmOptions, self).__init__(
+        super(FieldACOptions, self).__init__(
             self._mapped_widgets,
             config,
             form_module=qtform_options,
@@ -73,9 +74,8 @@ class RevHmOptions(OptionsDialog):
         # Instance methods that modify the initialized UI should either be
         # called from self._setupUI or from here
 
-    # UI adjustments
     def _setupUI(self):
-        super(RevHmOptions, self)._setupUI()
+        super(FieldACOptions, self)._setupUI()
 
         # manually adjust title label font sizes on Windows
         # gap between default windows font sizes and sizes that work well
@@ -88,16 +88,107 @@ class RevHmOptions(OptionsDialog):
                 font.setPointSize(int(default_size * 1.5))
                 label.setFont(font)
 
+    def _setupEvents(self):
+        f = self.form
+        f.toolButton_website.clicked.connect(lambda _: self.openWeb("anking"))
+        f.toolButton_youtube.clicked.connect(lambda _: self.openWeb("youtube"))
+        f.toolButton_patreon.clicked.connect(lambda _: self.openWeb("patreon"))
+        f.toolButton_palace.clicked.connect(lambda _: self.openWeb("palace"))
+        f.toolButton_instagram.clicked.connect(
+            lambda _: self.openWeb("instagram"))
+        f.toolButton_facebook.clicked.connect(
+            lambda _: self.openWeb("facebook"))
 
-def invokeOptionsDialog(parent=None):
-    """Call settings dialog"""
-    dialog = RevHmOptions(config, mw, parent=parent)
+    def openWeb(self, site):
+        if site == "anking":
+            openLink('https://www.ankingmed.com')
+        elif site == "youtube":
+            openLink('https://www.youtube.com/theanking')
+        elif site == "patreon":
+            openLink('https://www.patreon.com/ankingmed')
+        elif site == "instagram":
+            openLink('https://instagram.com/ankingmed')
+        elif site == "facebook":
+            openLink('https://facebook.com/ankingmed')
+        elif site == "video":
+            openLink('https://youtu.be/5XAq0KpU3Jc')
+        elif site == "palace":
+            openLink(
+                'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
+
+
+def create_get_help_submenu(parent: QMenu) -> QMenu:
+    submenu_name = "Get Anki Help"
+    menu_options = [
+        (
+            "Online Mastery Course",
+            'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course'
+        ),
+        ("Daily Q and A Support", "https://www.ankipalace.com/memberships"),
+        ("1-on-1 Tutoring", "https://www.ankipalace.com/tutoring"),
+    ]
+    submenu = QMenu(submenu_name, parent)
+    for name, url in menu_options:
+        act = QAction(name, mw)
+        act.triggered.connect(lambda _, u=url: openLink(u))
+        submenu.addAction(act)
+    return submenu
+
+
+def maybe_add_get_help_submenu(menu: QMenu) -> None:
+    """Adds 'Get Anki Help' submenu in 'Anking' menu if needed.
+
+    The submenu is added if:
+     - The submenu does not exist in menu
+     - The submenu is an outdated version - existing is deleted
+
+    With versioning and anking_get_help property,
+    future version can rename, hide, or change contents in the submenu
+    """
+    submenu_property = "anking_get_help"
+    submenu_ver = 2
+    for act in menu.actions():
+        if act.property(submenu_property) or act.text() == "Get Anki Help":
+            ver = act.property("version")
+            if ver and ver >= submenu_ver:
+                return
+            submenu = create_get_help_submenu(menu)
+            menu.insertMenu(act, submenu)
+            menu.removeAction(act)
+            act.deleteLater()
+            new_act = submenu.menuAction()
+            new_act.setProperty(submenu_property, True)
+            new_act.setProperty("version", submenu_ver)
+            return
+    else:
+        submenu = create_get_help_submenu(menu)
+        menu.addMenu(submenu)
+        new_act = submenu.menuAction()
+        new_act.setProperty(submenu_property, True)
+        new_act.setProperty("version", submenu_ver)
+
+
+def get_anking_menu() -> QMenu:
+    """Return AnKing menu. If it doesn't exist, create one. Make sure its submenus are up to date."""
+    menu_name = "&AnKing"
+    menubar = mw.form.menubar
+    for a in menubar.actions():
+        if menu_name == a.text():
+            menu = a.menu()
+            break
+    else:
+        menu = menubar.addMenu(menu_name)
+    maybe_add_get_help_submenu(menu)
+    return menu
+
+
+def invoke_options_dialog(parent=None):
+    dialog = FieldACOptions(config, mw, parent=parent)
     return dialog.exec_()
 
 
-def initializeOptions():
-    config.setConfigAction(invokeOptionsDialog)
-    # Set up menu entry:
-    options_action = QAction("Field Autocompmlete Options", mw)
-    options_action.triggered.connect(lambda _: invokeOptionsDialog())
-    mw.form.menuTools.addAction(options_action)
+def init_options():
+    menu = get_anking_menu()
+    a = QAction("Field Autocomplete", mw)
+    a.triggered.connect(invoke_options_dialog)
+    menu.addAction(a)
