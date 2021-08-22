@@ -10,19 +10,26 @@ The autocomplete feature can be toggled on and off for a field by clicking the "
 
 The search mode can be set to strict (default) or loose in the add-on settings. When using the loose search mode, searching for e.g. "ate" would also bring up "rate", which wouldn't show up in the strict search mode.
 
-This add-on is based on the <a href="https://github.com/acecodes/anki-editor-autocomplete" rel="nofollow">anki-editor-autocomplete</a><a> add-on.
+This add-on is based on the <a href="https://github.com/acecodes/anki-editor-autocomplete" rel="nofollow">anki-editor-autocomplete</a> add-on.
 
-<b>Screenshots</b>
+<div><b>Screenshots</b><div>
 <img src="https://raw.githubusercontent.com/ankipalace/anki-field-autocomplete/master/screenshots/dropdown.gif?raw=true">
+<br>
+<br>
 
-<b>     strict search (default)</b>
+<div><b>strict search (default)</b><div>
 <img src="https://raw.githubusercontent.com/ankipalace/anki-field-autocomplete/master/screenshots/strict_search.gif?raw=true">
+<br>
+<br>
 
-<b>     loose search</b>
+
+<div><b>loose search</b><div>
 <img src="https://raw.githubusercontent.com/ankipalace/anki-field-autocomplete/master/screenshots/loose_search.gif?raw=true">
+<br>
+<br>
 
 <b>Problems, Bugs, Errors, Improvements</b>
-If you find a serious bug, please submit it on </a><a href="https://github.com/ankipalace/anki-field-autocomplete/issues" rel="nofollow">Github</a> or email us at ankingmed@gmail.com. Please remember that we are not coders and thus may not be able to provide support.
+If you find a serious bug, please submit it on <a href="https://github.com/ankipalace/anki-field-autocomplete/issues" rel="nofollow">Github</a> or email us at ankingmed@gmail.com. Please remember that we are not coders and thus may not be able to provide support.
 
 <b>Changelog</b>
 2021-8-17: Initial Release
