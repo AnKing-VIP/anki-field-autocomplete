@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Review Heatmap Add-on for Anki
+# Libaddon for Anki
 #
-# Copyright (C) 2016-2020  Aristotelis P. <https//glutanimate.com/>
+# Copyright (C) 2018-2019  Aristotelis P. <https//glutanimate.com/>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version, with the additions
-# listed at the end of the accompanied license file.
+# listed at the end of the license file that accompanied this program.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,7 @@
 # NOTE: This program is subject to certain additional terms pursuant to
 # Section 7 of the GNU Affero General Public License.  You should have
 # received a copy of these additional terms immediately following the
-# terms and conditions of the GNU Affero General Public License which
+# terms and conditions of the GNU Affero General Public License that
 # accompanied this program.
 #
 # If not, please request a copy through one of the means of contact
@@ -30,32 +30,30 @@
 # Any modifications to this file must keep this entire header intact.
 
 """
-Handles add-on configuration
+Helpers for interacting with Anki's editor instances
 """
 
-from aqt import mw
-
-from .libaddon.addon import ADDON
-from .libaddon.anki.config.manager import ConfigManager
-
-__all__ = ["config"]
+# Handling async JS execution when saving editor content
 
 
-config_defaults = {
-    "synced": {
-        "loose_search": False,
-        "active_note_type_field_ids": [],
-        "version": ADDON.VERSION,
-    },
-    "profile":{
-        "hotkeys":{
-            "toggle": "Alt+Shift+A",
-        },
-        "version": ADDON.VERSION,
-    },
+def editorSaveThen(callback):
+    def onSaved(editor, *args, **kwargs):
+        # uses evalWithCallback internally:
+        editor.saveNow(lambda: callback(editor, *args, **kwargs))
 
-}
+    return onSaved
 
-config = ConfigManager(
-    mw, config_dict=config_defaults, conf_key="field_autocomplete", reset_req=True
-)
+
+def widgetEditorSaveThen(callback):
+    def onSaved(widget, *args, **kwargs):
+        """[summary]
+        
+        Arguments:
+            callback {[type]} -- [description]
+            widget {Qt widget or widget} -- Qt object the editor is a member of
+            (e.g. Browser, AddCards, EditCurrent)
+        """
+        # uses evalWithCallback internally:
+        widget.editor.saveNow(lambda: callback(widget, *args, **kwargs))
+
+    return onSaved

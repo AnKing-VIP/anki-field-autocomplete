@@ -1,12 +1,10 @@
 import json
-from pathlib import Path
 
 import aqt
 from aqt import gui_hooks, mw
 from aqt.editor import Editor
 
-from .config import remove, set
-from .user_config import getUserOption
+from .config import config
 from .utils import distinct
 
 # limit for options sent to autocomplete.js at once
@@ -40,15 +38,17 @@ def handle_update_ac_settings(cmd, editor):
     note_type = editor.note.note_type()
     fld = next(x for x in note_type['flds'] if x['ord'] == ord)
     id = f'{note_type["id"]} {fld["name"]}'
+    enabled_ids = set(config.synced['active_note_type_field_ids'])
     if enabled:
-        set(id, True)
+        enabled_ids.add(id)
     else:
-        remove(id)
+        enabled_ids.discard(id)
+    config.synced['active_note_type_field_ids'] = list(enabled_ids)
 
     return True
 
 
-def handle_autocomplete(cmd, editor : Editor):
+def handle_autocomplete(cmd, editor: Editor):
     _, jsonText = cmd.split(":", 1)
     data = json.loads(jsonText)
     ord = data["ord"]
@@ -57,7 +57,7 @@ def handle_autocomplete(cmd, editor : Editor):
     note_type = editor.note.note_type()
     note_type_name = note_type["name"]
     fld_name = next(x["name"] for x in note_type["flds"] if x["ord"] == ord)
-    if getUserOption('loose_search', refresh=True):
+    if config.synced['loose_search']:
         query = f'note:"{note_type_name}" "{fld_name}:*{text}*"'
     else:
         query = f'note:"{note_type_name}" "{fld_name}:{text}*"'
@@ -88,6 +88,7 @@ def handle_autocomplete(cmd, editor : Editor):
 def url_from_fname(file_name: str) -> str:
     addon_package = mw.addonManager.addonFromModule(__name__)
     return f"/_addons/{addon_package}/web/{file_name}"
+
 
 def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
     if not isinstance(context, Editor):
