@@ -30,7 +30,7 @@ jobs:
         uses: EndBug/add-and-commit@v7.1.1
         with:
           message: Bump Version to v${{ github.event.inputs.version }}
-          tags: ${{ github.event.inputs.version }}
+          tag: ${{ github.event.inputs.version }}
         
       - name: Create ankiaddon file
         run: aab build
