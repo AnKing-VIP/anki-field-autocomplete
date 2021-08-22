@@ -7,7 +7,9 @@ profile/
 
 meta.json
 
-src/*/__pycache__/
+__pycache__
 
-.qt_for_python/
-src/*/gui/
+src/*/gui/forms/anki*
+src/*/gui/forms/LICENSE*
+src/*/gui/resources/anki*
+src/*/gui/resources/LICENSE*
