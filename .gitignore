@@ -3,11 +3,10 @@
 
 build/
 tools/
- profile/
+profile/
 
 meta.json
 
-src/*/__pycache__/
+__pycache__/
 
-.qt_for_python/
 src/*/gui/
