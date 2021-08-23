@@ -36,6 +36,7 @@ jobs:
       - name: commit version bump
         run: |
           git commit --allow-empty -m "Bump Version to v${{ github.event.inputs.version }}"
+          git tag -a ${{ github.event.inputs.version }}
           git push origin master
         
       - name: Create ankiaddon file
