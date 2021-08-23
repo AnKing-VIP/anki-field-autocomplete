@@ -26,11 +26,16 @@ jobs:
           python -m pip install git+git://github.com/glutanimate/anki-addon-builder.git@4039b5bb743773a18cb2911e6dd38fa1e3f65982
           python -m pip install pyqt5
           
-      - name: Commit changes to git
-        uses: EndBug/add-and-commit@v7.1.1
-        with:
-          message: Bump Version to v${{ github.event.inputs.version }}
-          tag: ${{ github.event.inputs.version }}
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: commit version bump
+        run: |
+          git commit --allow-empty -m "Bump Version to v${{ github.event.inputs.version }}"
+          git push origin master
         
       - name: Create ankiaddon file
         run: aab build
