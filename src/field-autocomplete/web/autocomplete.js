@@ -138,12 +138,10 @@ var Autocomplete = {
         if(Autocomplete.enabledFields.includes(ord)){
             Autocomplete.enabledFields.splice(Autocomplete.enabledFields.indexOf(ord), 1)
             Autocomplete.icons[ord].classList.remove('enabled')
-            Autocomplete.icons[ord].classList.add('disabled')
             Autocomplete.removeAc(ord)
             globalThis.bridgeCommand(`update_ac_settings:{"ord" : ${ord}, "val" : false}`)
         } else {
             Autocomplete.enabledFields.push(ord)
-            Autocomplete.icons[ord].classList.remove('disabled')
             Autocomplete.icons[ord].classList.add('enabled')
             Autocomplete.addAc(ord)
             globalThis.bridgeCommand(`update_ac_settings:{"ord" : ${ord}, "val" : true}`)
@@ -178,7 +176,6 @@ var Autocomplete = {
 
     addIconToField: (field, icon) => {
         field.labelContainer.insertBefore(icon, field.labelContainer.label.nextSibling)
-        field.labelContainer.style.setProperty("justify-content", "flex-end")
 
         // move label back to the left
         field.labelContainer.label.style.setProperty("margin-right", "auto")
