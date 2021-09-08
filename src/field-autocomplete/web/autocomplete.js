@@ -117,6 +117,7 @@ var Autocomplete = {
         })
 
         ac.input.addEventListener('input', () => {
+            if(ac.disabled) return
             globalThis.bridgeCommand(`autocomplete:{ "ord": ${ord}, "text" : ${JSON.stringify(editable.fieldHTML)} }`)
         })
 
@@ -128,7 +129,7 @@ var Autocomplete = {
         var ac = Autocomplete.acByField.get(ord)
         ac.unInit()
         ac.list.remove()
-        delete ac
+        ac.disabled = true
 
         Autocomplete.acByField.delete(ord)
         Autocomplete.optionsByField.delete(ord)
