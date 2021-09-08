@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+import shlex
 
 import aqt
 from aqt import gui_hooks, mw
@@ -57,7 +57,7 @@ def handle_autocomplete(cmd, editor : Editor):
     ord = data["ord"]
     fld_name = next(x["name"] for x in note_type["flds"] if x["ord"] == ord)
 
-    text = data["text"].replace('&nbsp;', ' ').replace('"', '\\"')
+    text = shlex.shlex((data["text"].replace('&nbsp;', ' ')))
     if getUserOption('loose_search', refresh=True):
         query = f'note:"{note_type_name}" "{fld_name}:*{text}*"'
     else:
