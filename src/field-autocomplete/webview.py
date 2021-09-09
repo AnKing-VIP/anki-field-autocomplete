@@ -57,7 +57,9 @@ def handle_autocomplete(cmd, editor : Editor):
     ord = data["ord"]
     fld_name = next(x["name"] for x in note_type["flds"] if x["ord"] == ord)
 
-    text = shlex.shlex((data["text"].replace('&nbsp;', ' ')))
+    text = data["text"].replace('&nbsp;', ' ').replace('\\', '\\\\').replace('"', '\\"')
+    print(text)
+
     if getUserOption('loose_search', refresh=True):
         query = f'note:"{note_type_name}" "{fld_name}:*{text}*"'
     else:
