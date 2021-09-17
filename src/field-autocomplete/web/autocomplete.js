@@ -6,14 +6,11 @@ var Autocomplete = {
     looseSearch: null,
 
     setup: (options) => {
-        enabledFields = options['ords']
-        looseSearch = options['looseSearch']
+        Autocomplete.enabledFields = options['ords']
+        Autocomplete.looseSearch = options['looseSearch']
 
-        Autocomplete.enabledFields = enabledFields
-        Autocomplete.setupAcs(enabledFields)
-        Autocomplete.setupIcons(enabledFields)
-
-        Autocomplete.looseSearch = looseSearch
+        Autocomplete.setupAcs(Autocomplete.enabledFields)
+        Autocomplete.setupIcons(Autocomplete.enabledFields)
     },
 
     update: (data) => {
