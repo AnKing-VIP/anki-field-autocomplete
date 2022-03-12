@@ -95,9 +95,8 @@ def load_autocomplete_js(webcontent: aqt.webview.WebContent, context):
     if not isinstance(context, Editor):
         return
 
-    webcontent.head += f'<script type="module" src="{url_from_fname("autocomplete/autoComplete.js")}"></script>'
-    webcontent.js.append(url_from_fname("autocomplete.js"))
-    webcontent.css.append(url_from_fname("icon.css"))
+    webcontent.js.append(url_from_fname("editor.js"))
+    webcontent.css.append(url_from_fname("editor.css"))
 
 
 def init_webview():

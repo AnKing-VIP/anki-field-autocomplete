@@ -9,4 +9,6 @@ meta.json
 
 __pycache__/
 
-src/*/gui/
+# NPM / Typescript 
+node_modules
+yarn-error.log

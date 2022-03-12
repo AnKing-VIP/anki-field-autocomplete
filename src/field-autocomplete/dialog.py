@@ -5,8 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from .gui.forms.anki21.settings_dialog import Ui_Dialog
-from .gui.resources.anki21 import icons_rc  # type: ignore
+from .gui.forms import settings_dialog
 from .user_config import getDefaultConfig, getUserOption, writeConfig
 
 conf = getUserOption()
@@ -17,7 +16,7 @@ class SettingsDialog(QDialog):
     timer = None
 
     def __init__(self, parent):
-        QDialog.__init__(self, mw, Qt.Window)
+        QDialog.__init__(self, mw, Qt.WindowType.Window)
         mw.setupDialogGC(self)
         self.mw = mw
         self.parent = parent
@@ -25,10 +24,10 @@ class SettingsDialog(QDialog):
         self.loadConfigData()
         self.setupConnections()
 
-        self.exec_()
+        self.exec()
 
     def setupDialog(self):
-        self.form = Ui_Dialog()
+        self.form = settings_dialog.Ui_Dialog()
         self.form.setupUi(self)
 
     def loadConfigData(self):

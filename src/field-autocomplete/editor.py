@@ -31,5 +31,6 @@ def add_ac_toggle_shortcut(shortcuts, editor: editor.Editor):
 
 
 def init_editor():
-    gui_hooks.editor_did_load_note.append(setup_ac)
-    gui_hooks.editor_did_init_shortcuts.append(add_ac_toggle_shortcut)
+    print("XXX not calling ac setup in editor.py")
+    # gui_hooks.editor_did_load_note.append(setup_ac)
+    # gui_hooks.editor_did_init_shortcuts.append(add_ac_toggle_shortcut)
