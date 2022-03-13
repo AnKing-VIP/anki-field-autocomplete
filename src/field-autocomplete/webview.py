@@ -22,7 +22,7 @@ def handle_bridge_commands(handled, cmd, context):
 
     editor: Editor = context
 
-    if cmd.startswith("autocomplete"):
+    if cmd.startswith("fieldAutocomplete"):
         if handle_autocomplete(cmd, editor):
             return (True, None)
     elif cmd.startswith("update_ac_settings"):
@@ -82,7 +82,7 @@ def handle_autocomplete(cmd, editor : Editor):
         "ord": ord,
     }
 
-    editor.web.eval(f"Autocomplete.update({json.dumps(data)})")
+    editor.web.eval(f"fieldAutocomplete.update({json.dumps(data)})")
 
     return True
 

@@ -20,17 +20,16 @@ def setup_ac(editor):
         "ords" : enabled_field_ords,
         "looseSearch" : getUserOption('loose_search', refresh=True)
     }
-    editor.web.eval(f'Autocomplete.setup({json.dumps(data)})')
+    editor.web.eval(f'fieldAutocomplete.setup({json.dumps(data)})')
 
 
 def add_ac_toggle_shortcut(shortcuts, editor: editor.Editor):
     shortcuts.append((
         getUserOption('toggle_ac_shortcut', refresh=True),
-        lambda: editor.web.eval(f'Autocomplete.toggleAc({editor.currentField})')
+        lambda: editor.web.eval(f'fieldAutocomplete.toggleAc({editor.currentField})')
     ))
 
 
 def init_editor():
-    print("XXX not calling ac setup in editor.py")
-    # gui_hooks.editor_did_load_note.append(setup_ac)
+    gui_hooks.editor_did_load_note.append(setup_ac)
     # gui_hooks.editor_did_init_shortcuts.append(add_ac_toggle_shortcut)

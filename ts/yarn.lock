@@ -59,7 +59,7 @@
 
 "@tarekraafat/autocomplete.js@^10.2.6":
   version "10.2.6"
-  resolved "https://registry.npmjs.org/@tarekraafat/autocomplete.js/-/autocomplete.js-10.2.6.tgz"
+  resolved "https://registry.yarnpkg.com/@tarekraafat/autocomplete.js/-/autocomplete.js-10.2.6.tgz#c25a35b09cd5af15ee2941950d5ae52a79b77abf"
   integrity sha512-M3awL75YTQVHev4XlWGRKJalwVG3MGgtNnbRdtNipcyMcAV1sfkireBM8BKL/vhFhrus+6/5KZfj/DJDu8X0mg==
 
 "@tsconfig/svelte@^2.0.1":
