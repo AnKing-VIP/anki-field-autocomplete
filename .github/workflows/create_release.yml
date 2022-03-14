@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with: 
+        with:
           submodules: recursive
           fetch-depth: 0
 
@@ -21,12 +21,11 @@ jobs:
         uses: actions/setup-python@v2.2.1
         with:
           python-version: 3.8
-      
+
       - name: Install dependencies
         run: |
-          python -m pip install git+git://github.com/glutanimate/anki-addon-builder.git@4039b5bb743773a18cb2911e6dd38fa1e3f65982
-          python -m pip install pyqt5
-          
+          pip install --upgrade git+https://github.com/glutanimate/anki-addon-builder.git@v1.0.0-dev.1#egg=aab[qt5,qt6]
+
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
@@ -39,18 +38,18 @@ jobs:
           git push origin master
           git tag ${{ github.event.inputs.version }}
           git push origin tag ${{ github.event.inputs.version }}
-        
+
       - name: Create ankiaddon file
         run: aab build -d ankiweb
-      
+
       - name: Declare some variables
         id: vars
         shell: bash
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           echo "::set-output name=module_name::$(ls src)"
-          echo "::set-output name=build_name::$(ls build)"
-     
+          echo "::set-output name=build_name::$(ls build | grep --color=never .ankiaddon)"
+
       - name: Create github release and upload ankiaddon file
         uses: svenstaro/upload-release-action@2.2.1
         with:
