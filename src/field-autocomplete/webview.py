@@ -75,6 +75,11 @@ def handle_autocomplete(cmd, editor : Editor):
         option = next(options_iter, None)
         if option is None:
             break
+
+        # In Anki 2.1.50 spaces right before clozes are represented as &nbsp;
+        # seems to be unintenional behaviour
+        option = option.replace("&nbsp;", " ")
+
         options.append(option)
 
     data = {
