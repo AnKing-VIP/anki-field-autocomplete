@@ -197,8 +197,13 @@ export class Autocomplete {
         icon.addEventListener('click', () => {
             this.toggleAc(ord, fieldElm, fieldApi)
         })
-
-        const fieldState = fieldElm.getElementsByClassName("field-state")[0]
+        let fieldState;
+        if(fieldElm.getElementsByClassName("field-state").length) {
+            fieldState = fieldElm.getElementsByClassName("field-state")[0]
+        } else {
+            // 2.1.55+
+            fieldState = fieldElm.parentElement?.previousElementSibling?.getElementsByClassName("field-state")[0]
+        }
         fieldState.insertBefore(
             icon,
             fieldState.querySelector("span")
