@@ -1,9 +1,7 @@
 from anki import version as anki_version
 from aqt import mw
 from aqt.utils import openLink
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from aqt.qt import *
 
 from .gui.forms import settings_dialog
 from .user_config import getDefaultConfig, getUserOption, writeConfig
