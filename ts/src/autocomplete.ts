@@ -66,7 +66,7 @@ export class Autocomplete {
         this.optionsByField = new Map();
 
         for (const [ord, field] of this.fields.entries()) {
-            if (!enabledFields.includes(ord)) return;
+            if (!enabledFields.includes(ord)) continue;
             field.element.then((fieldElement: HTMLElement) => {
                 this._addAc(ord, fieldElement, field)
             })
