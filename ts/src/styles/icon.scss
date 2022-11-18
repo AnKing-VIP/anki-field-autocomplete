@@ -12,9 +12,9 @@
     background-repeat: no-repeat;
     background-origin: content-box;
     background-image: url('../icons/a.png');
+    background-position: center;
 }
 
 .enabled {
     filter: var(--lime);
 }
-
