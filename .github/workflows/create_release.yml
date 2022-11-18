@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade git+https://github.com/glutanimate/anki-addon-builder.git@v1.0.0-dev.2#egg="aab[qt5,qt6]"
+          python -m pip install git+https://github.com/glutanimate/anki-addon-builder.git@4039b5bb743773a18cb2911e6dd38fa1e3f65982
 
       - name: setup git config
         run: |
