@@ -82,11 +82,19 @@ export class Autocomplete {
         if (!resultListWrapper) {
             resultListWrapper = globalThis.document.createElement('span')
             resultListWrapper.id = 'result-list-wrapper'
-            editingArea.appendChild(resultListWrapper)
-
+            let wrapperParent;
+            if(editingArea.parentElement?.parentElement?.classList.contains("collapsible")) {
+                // 2.1.55+
+                wrapperParent = editingArea.parentElement.parentElement
+                wrapperParent.style.position = "relative"
+            }
+            else {
+                wrapperParent = editingArea
+            }
+            wrapperParent.appendChild(resultListWrapper)
             const style = document.createElement("style")
             style.innerHTML = css
-            editingArea.insertBefore(style, resultListWrapper)
+            wrapperParent.insertBefore(style, resultListWrapper)
         }
 
         const ac = new autoComplete({
@@ -197,8 +205,13 @@ export class Autocomplete {
         icon.addEventListener('click', () => {
             this.toggleAc(ord, fieldElm, fieldApi)
         })
-
-        const fieldState = fieldElm.getElementsByClassName("field-state")[0]
+        let fieldState;
+        if(fieldElm.getElementsByClassName("field-state").length) {
+            fieldState = fieldElm.getElementsByClassName("field-state")[0]
+        } else {
+            // 2.1.55+
+            fieldState = fieldElm.parentElement?.previousElementSibling?.getElementsByClassName("field-state")[0]
+        }
         fieldState.insertBefore(
             icon,
             fieldState.querySelector("span")
