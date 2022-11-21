@@ -36,7 +36,9 @@ export class Autocomplete {
         }
     }
 
-    toggleAc(ord: number, fieldElm: HTMLElement, fieldApi: EditorFieldAPI) {
+    async toggleAc(ord: number) {
+        const fieldApi = this.fields[ord];
+        const fieldElm = await fieldApi.element;
         if (this.enabledFields.includes(ord)) {
             this.enabledFields.splice(this.enabledFields.indexOf(ord), 1);
             this.icons[ord].classList.remove("enabled");
@@ -47,7 +49,7 @@ export class Autocomplete {
         } else {
             this.enabledFields.push(ord);
             this.icons[ord].classList.add("enabled");
-            this._addAc(ord, fieldElm, fieldApi);
+            await this._addAc(ord, fieldElm, fieldApi);
             globalThis.bridgeCommand(
                 `update_ac_settings:{"ord" : ${ord}, "val" : true}`,
             );
@@ -73,7 +75,7 @@ export class Autocomplete {
         }
     }
 
-    _addAc(ord: number, fieldElm: HTMLElement, fieldApi: EditorFieldAPI) {
+    async _addAc(ord: number, fieldElm: HTMLElement, fieldApi: EditorFieldAPI) {
         const editingArea = fieldElm.getElementsByClassName("editing-area")[0];
         const shadowRoot = editingArea.getElementsByClassName("rich-text-editable")[0].shadowRoot;
         const editable = shadowRoot?.querySelector("anki-editable");
@@ -186,7 +188,7 @@ export class Autocomplete {
 
         for (const [ord, field] of this.fields.entries()) {
             field.element.then((fieldElement) => {
-                const icon = this._addIconToField(ord, fieldElement, field)
+                const icon = this._addIconToField(ord, fieldElement)
                 this.icons.push(icon)
 
                 if (enabledFields.includes(ord)) {
@@ -199,11 +201,11 @@ export class Autocomplete {
         }
     }
 
-    _addIconToField(ord: number, fieldElm: HTMLElement, fieldApi: EditorFieldAPI): HTMLElement {
+    _addIconToField(ord: number, fieldElm: HTMLElement): HTMLElement {
         const icon = globalThis.document.createElement('span')
         icon.classList.add('ac-icon')
         icon.addEventListener('click', () => {
-            this.toggleAc(ord, fieldElm, fieldApi)
+            this.toggleAc(ord)
         })
         let fieldState;
         if(fieldElm.getElementsByClassName("field-state").length) {
