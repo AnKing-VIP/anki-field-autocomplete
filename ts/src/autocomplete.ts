@@ -87,7 +87,8 @@ export class Autocomplete {
             let wrapperParent;
             if(editingArea.parentElement?.parentElement?.classList.contains("collapsible")) {
                 // 2.1.55+
-                wrapperParent = editingArea.parentElement.parentElement
+                wrapperParent = fieldElm.parentElement?.parentElement?.parentElement
+                wrapperParent.style.display = "block"
                 wrapperParent.style.position = "relative"
             }
             else {
