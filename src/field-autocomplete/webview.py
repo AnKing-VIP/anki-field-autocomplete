@@ -64,7 +64,7 @@ def handle_autocomplete(cmd, editor : Editor):
     else:
         query = f'note:"{note_type_name}" "{fld_name}:{text}*"'
     col = editor.note.col
-    nids = col.find_notes(query)
+    nids = col.find_notes(query, order="n.id desc")
 
     options = []
     options_iter = distinct(
