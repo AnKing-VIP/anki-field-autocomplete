@@ -10,6 +10,8 @@ The autocomplete feature can be toggled on and off for a field by clicking the "
 
 The search mode can be set to strict (default) or loose in the add-on settings. When using the loose search mode, searching for e.g. "ate" would also bring up "rate", which wouldn't show up in the strict search mode.
 
+In version 1.6+ Words or phrases that you have used more than once will show up at the top of the search as a suggestion.
+
 This add-on is based on the <a href="https://github.com/acecodes/anki-editor-autocomplete" rel="nofollow">anki-editor-autocomplete</a> add-on.
 
 <div><b>Screenshots</b><div>
