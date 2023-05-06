@@ -50,7 +50,7 @@ class SettingsDialog(QDialog):
         f.toolButton_website.clicked.connect(lambda _: self.openWeb("anking"))
         f.toolButton_youtube.clicked.connect(lambda _: self.openWeb("youtube"))
         f.toolButton_patreon.clicked.connect(lambda _: self.openWeb("patreon"))
-        f.toolButton_palace.clicked.connect(lambda _: self.openWeb("palace"))
+        f.toolButton_course.clicked.connect(lambda _: self.openWeb("course"))
         f.toolButton_instagram.clicked.connect(
             lambda _: self.openWeb("instagram"))
         f.toolButton_facebook.clicked.connect(
@@ -82,9 +82,9 @@ class SettingsDialog(QDialog):
             openLink('https://facebook.com/ankingmed')
         elif site == "video":
             openLink('https://youtu.be/5XAq0KpU3Jc')
-        elif site == "palace":
+        elif site == "course":
             openLink(
-                'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
+                'https://www.theanking.com/anki-mastery-course/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course')
 
     def _updateCheckbox(self, cb, key):
         n = -1 if cb == 2 else 1
@@ -136,10 +136,10 @@ def create_get_help_submenu(parent: QMenu) -> QMenu:
     menu_options = [
         (
             "Online Mastery Course",
-                'https://courses.ankipalace.com/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course'
+                'https://www.theanking.com/anki-mastery-course/?utm_source=anking_autocomplete_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course'
         ),
-        ("Daily Q and A Support", "https://www.ankipalace.com/memberships"),
-        ("1-on-1 Tutoring", "https://www.ankipalace.com/tutoring"),
+        ("Daily Q and A Support", "https://www.theanking.com/anking-memberships"),
+        ("1-on-1 Tutoring", "https://www.theanking.com/anking-tutoring"),
     ]
     submenu = QMenu(submenu_name, parent)
     for name, url in menu_options:
