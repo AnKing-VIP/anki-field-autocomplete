@@ -20,7 +20,21 @@ def setup_ac(editor):
         "ords" : enabled_field_ords,
         "looseSearch" : getUserOption('loose_search', refresh=True)
     }
-    editor.web.eval(f'fieldAutocomplete.setup({json.dumps(data)})')
+    editor.web.eval(f"""
+        function setupAutocompleteWithRetries(retries, delay) {{
+            if (typeof fieldAutocomplete !== 'undefined') {{
+                fieldAutocomplete.setup({json.dumps(data)})           
+            }} else if (retries > 0) {{
+                setTimeout(() => {{
+                    setupAutocompleteWithRetries(retries - 1, delay);
+                }}, delay);
+            }} else {{
+                console.log("Field Autocomplete failed to load")
+            }}
+        }}
+    
+        setupAutocompleteWithRetries(10, 200);
+    """)
 
 
 def add_ac_toggle_shortcut(shortcuts, editor: editor.Editor):
