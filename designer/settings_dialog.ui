@@ -27,7 +27,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Facebook.png</normaloff>:/CustomBackground/Facebook.png</iconset>
+       <normaloff>:/FieldAutoComplete/Facebook.png</normaloff>:/FieldAutoComplete/Facebook.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -50,7 +50,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/YouTube.png</normaloff>:/CustomBackground/YouTube.png</iconset>
+       <normaloff>:/FieldAutoComplete/YouTube.png</normaloff>:/FieldAutoComplete/YouTube.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -80,7 +80,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Instagram.png</normaloff>:/CustomBackground/Instagram.png</iconset>
+       <normaloff>:/FieldAutoComplete/Instagram.png</normaloff>:/FieldAutoComplete/Instagram.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -103,7 +103,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/AnKingSmall.png</normaloff>:/CustomBackground/AnKingSmall.png</iconset>
+       <normaloff>:/FieldAutoComplete/AnKingSmall.png</normaloff>:/FieldAutoComplete/AnKingSmall.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -126,7 +126,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/icons.qrc">
-       <normaloff>:/CustomBackground/Patreon.png</normaloff>:/CustomBackground/Patreon.png</iconset>
+       <normaloff>:/FieldAutoComplete/Patreon.png</normaloff>:/FieldAutoComplete/Patreon.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -222,7 +222,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources/icons.qrc">
-           <normaloff>:/CustomBackground/AnKingSmall.png</normaloff>:/CustomBackground/AnKingSmall.png</iconset>
+           <normaloff>:/FieldAutoComplete/AnKingSmall.png</normaloff>:/FieldAutoComplete/AnKingSmall.png</iconset>
          </property>
          <property name="iconSize">
           <size>
